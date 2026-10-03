@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>for my jaanuu ♡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{
+  background:#faf9f6;
+  color:#4b4645;
+  font-family:Caveat,"Segoe Print","Bradley Hand",cursive;
+}
+button{font:inherit}
+#app{height:100%;width:100%;position:relative;overflow:hidden}
+.screen{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .55s ease,transform .55s ease;
+}
+.hide{opacity:0;pointer-events:none;transform:scale(.985)}
+/* INTRO */
+.intro{text-align:center;padding:24px;background:#faf9f6}
+.intro .tiny{font-size:19px;color:#9d9693;letter-spacing:.8px}
+.intro h1{font-size:52px;font-weight:500;color:#605552;margin:7px 0 3px}
+.intro p{font-size:21px;color:#aaa09d;margin:0 0 25px}
+.openBtn{
+  border:1px solid #b9aaa6;background:#fffdfb;color:#665957;
+  padding:10px 27px;border-radius:24px;font-size:20px;
+  box-shadow:0 5px 18px #66595716;cursor:pointer
+}
+/* GAME */
+.game{background:#f7f8f5}
+.gamebox{text-align:center;width:min(500px,94vw);padding:15px}
+.gamebox h2{font-size:30px;font-weight:500;color:#655a57;margin:0 0 1px}
+.gamebox p{font-size:18px;color:#aaa09e;margin:0 0 16px}
+.scene{position:relative;height:430px;width:100%;overflow:hidden}
+.note{
+  position:absolute;z-index:4;left:50%;top:8px;transform:translateX(-50%) rotate(-2deg);
+  width:min(310px,72vw);text-align:left;color:#4e4948;
+}
+.note .noteTitle{font-size:25px;line-height:1.05}
+.note .noteSub{font-size:20px;line-height:1.05;margin-top:8px}
+.envelope{
+  position:absolute;left:50%;top:115px;transform:translateX(-50%);
+  width:min(350px,86vw);height:220px;background:#cfe2de;border-radius:2px;
+  box-shadow:0 13px 30px #78908b20;overflow:visible;
+}
+.envelope:before{
+  content:"";position:absolute;inset:0;z-index:2;background:#bfd8d3;
+  clip-path:polygon(0 0,50% 53%,100% 0,100% 100%,0 100%);
+}
+.flap{
+  position:absolute;z-index:6;left:0;top:0;width:100%;height:123px;
+  background:#dcebe7;clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top center;transition:transform .75s cubic-bezier(.2,.8,.2,1);
+}
+.envelopeLabel{
+  position:absolute;z-index:7;left:50%;bottom:24px;transform:translateX(-50%);
+  font-family:Caveat,"Segoe Print","Bradley Hand",cursive;
+  font-size:29px;color:#687674;white-space:nowrap;
+}
+.seal{
+  position:absolute;z-index:9;left:50%;top:53%;transform:translate(-50%,-50%);
+  width:51px;height:51px;border-radius:50%;background:#eeb8c5;
+  display:flex;align-items:center;justify-content:center;font-size:25px;
+  box-shadow:0 5px 13px #8f596530;transition:.35s
+}
+.targets{position:absolute;inset:0;z-index:20;pointer-events:none}
+.target{
+  position:absolute;width:48px;height:48px;border:0;border-radius:50%;
+  background:#fffdfb;color:#bd7588;box-shadow:0 4px 14px #5b45451c;
+  font-size:24px;pointer-events:auto;cursor:pointer;
+  animation:driftAcross var(--duration) linear infinite;
+}
+@keyframes driftAcross{
+  0%{transform:translateX(-70px) translateY(0) rotate(-10deg)}
+  25%{transform:translateX(110px) translateY(-25px) rotate(8deg)}
+  50%{transform:translateX(245px) translateY(15px) rotate(-7deg)}
+  75%{transform:translateX(380px) translateY(-20px) rotate(10deg)}
+  100%{transform:translateX(540px) translateY(5px) rotate(-5deg)}
+}
+.target.hit{animation:pop .28s forwards!important}
+@keyframes pop{to{opacity:0;transform:scale(1.8)}}
+.counter{font-size:18px;color:#9b8986;margin-top:4px}
+.unlock{opacity:.45;transition:opacity .3s}
+.unlock.ready{opacity:1}
+.unlock button{
+  border:1px solid #ad9998;background:#fffdfb;color:#685957;
+  border-radius:22px;padding:8px 23px;font-size:19px;cursor:pointer
+}
+.gameHint{font-size:17px!important;color:#a59a98!important;margin-top:3px!important}
+/* OPEN */
+.envelope.open .flap{transform:rotateX(180deg)}
+.envelope.open .letterPeek{transform:translateY(-15px)}
+.envelope.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.3)}
+/* LETTER */
+.letterScreen{
+  display:block;overflow-y:auto;overflow-x:hidden;
+  background:#faf9f6;
+}
+.page{
+  width:min(760px,100%);
+  min-height:100vh;
+  margin:auto;
+  padding:28px 18px 70px;
+}
+.sheet{
+  min-height:calc(100vh - 56px);
+  padding:35px 25px 55px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      #fffefb 0px,
+      #fffefb 29px,
+      #e7e3dd 30px,
+      #fffefb 31px
+    );
+  box-shadow:0 3px 20px #4d454012;
+}
+.sheetTitle{text-align:center;font-size:28px;font-weight:500;margin:0 0 24px;color:#504746}
+.letterText{
+  white-space:pre-wrap;
+  font-family:Caveat,"Segoe Print","Bradley Hand",cursive;
+  font-size:22px;
+  line-height:1.36;
+  color:#4e4a49;
+}
+.end{text-align:center;font-size:27px;margin-top:38px;color:#7b6266}
+@media(max-width:500px){
+  .intro h1{font-size:43px}
+  .gamebox h2{font-size:27px}
+  .scene{height:370px}
+  .sheet{padding:29px 17px 50px}
+  .letterText{font-size:20px;line-height:1.39}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<section class="screen intro" id="intro">
+  <div>
+    <div class="tiny">a tiny thing for you...</div>
+    <h1>for my jaanuu ♡</h1>
+    <p>made with way too much love 😭</p>
+    <button class="openBtn" onclick="begin()">open it</button>
+  </div>
+</section>
+
+<section class="screen game hide" id="game">
+  <div class="gamebox">
+    <div class="scene">
+      <div class="note">
+        <div class="noteTitle">HYYYYY JAANUUUU 😭💗</div>
+        <div class="noteSub">there's something inside for you...</div>
+      </div>
+
+      <div class="envelope" id="envelope">
+        <div class="flap"></div>
+        <div class="envelopeLabel">my love ♡</div>
+        <div class="seal">♡</div>
+      </div>
+
+      <div class="targets" id="targets"></div>
+    </div>
+
+    <div class="counter" id="counter">0 / 5</div>
+    <div class="unlock" id="unlock">
+      <button onclick="openEnvelope()">open my letter ♡</button>
+    </div>
+    <div class="gameHint" id="hint">catch 5 of the little hearts 😭</div>
+  </div>
+</section>
+
+<section class="screen letterScreen hide" id="letterScreen">
+  <div class="page">
+    <div class="sheet">
+      <h1 class="sheetTitle">HYYYYY JAAANUUUU 😭💗</h1>
+      <div class="letterText">I LOVEEE YOUU SOO FCKING MUCCHH SWEETHEARTTTT LIKE SOOOSOSO MUCH UDFKKK AGRHHRHR YOUUU HAVE NO IDEAAA HOW FCKINGG LUCKYY I AM TO HAVEE YOU IN MY LIFEEEE AND AGRHRHRH JAANUU YOUU THE PRETTIEST PERSON TO EXIST IN THE WHOLE WORLDD LIKE AGRHRH FR I SWEARR 😭😭😭 I LOVEE YOU SOO FKCING MUCHHH U HAVE NO IDEAA AGRHRHR YOU MEAN SSMMSMSMS TO ME 
+
+AND ARGRHHRR OMGGG U WISHED ME BOYFRIENDS DAY AT 12 😭 AGRHRH WHILE ME COULDNT EVEN DO ANYTG SPCL FOR YOUUU😭😭😭😭AGRHRHRH THIS GIRLLLL 😭😭😭 I SWEARRR I FELT SOOO LOVEDDD AND AT THE SAME TIME I FELT SO BAD THAT I DIDN'T DO SOMETHING SPECIAL FOR YOUUU 👉👈 😭 BECAUSE YOU DESERVE TO BE SPOILED AND LOVED AND MADE TO FEEL SPECIAL EVERY SINGLE DAYYYY NOT JUST ON SOME RANDOM SPECIAL DAYYY 😭💗
+
+BUTTTT JAANUUU I JUST WANT YOU TO KNOW SOMETHINGGGG. I DON'T THINK I SAY THIS ENOUGH BUT I AM SOOOO FUCKING GRATEFUL FOR YOUUU. LIKE ACTUALLY. SOMETIMES I JUST STOP AND THINK ABOUT THE FACT THAT OUT OF ALL THE PEOPLE IN THIS WORLD I SOMEHOW GOT YOUUU IN MY LIFE AND I'M LIKE ????? HOW TF DID THIS HAPPEN 😭😭😭 
+
+YOU'RE NOT JUST MY GIRLFRIENDDDD. YOU'RE MY PERSONNNN 😭💗 YOU'RE THE ONE I WANNA TELL EVERYTHING TOO THE DUMBEST THING THT HAPPENED IN MY DAY SOME RANDOM THOUGHT I HAD AT 3AM SMTNG THAT MADE ME HAPPY SOMETHING THAT PISSED ME OFF AARGHFLJLHKJHJH IDKDIKD
+
+AND I LOVEEE THAT I CAN BE MYSELF WITH YOUUU. I DON'T HAVE TO SIT THERE AND THINK ABOUT HOW I'M SUPPOSED TO ACT OR WHAT I'M SUPPOSED TO SAY I CAN JUST BE THE MOST RANDOM, ANNOYING, STUPID VERSION OF MYSELF AND YOU'RE STILL THERE 😭💗 AND I HOPE YOU KNOW YOU CAN DO THE SAME WITH MEEE. YOU CAN TELL ME ANYTHINGGG. LITERALLY ANYTHING. YOU CAN COME TO ME WHEN YOU'RE HAPPY, WHEN YOU'RE SAD, WHEN YOU'RE ANGRY, WHEN YOU'RE OVERTHINKING, WHEN SOMETHING RANDOM HAPPENS, WHEN YOU JUST WANNA RANT ABOUT SOMETHING STUPID 😭 I WANNA HEAR ITTTT I WANNA KNOW YOUUU. ALL OF YOUUU
+
+AND AGRHRHRHR YOU'RE SOOO PRETTYYYY 😭😭😭 LIKE IT'S ACTUALLY UNFAIRRR. HOW TF AM I SUPPOSED TO LOOK AT YOU AND ACT NORMAL 😭 YOU'LL SEND ME ONE RANDOM PHOTO AND I'LL JUST BE SITTING THERE LIKE ????? THAT'S MY GIRLLLLL????? 😭💗 AND DON'T EVEN GET ME STARTED ON WHEN I SEE YOU IN PERSONNNN BECAUSE MY BRAIN JUST STOPS WORKINGGG 😭😭😭
+
+BUT IT'S NOT JUST YOUR FACE OR HOW PRETTY YOU ARE. I LOVE THE WAY YOU ARE. YOUR LITTLE HABITS YOUR RANDOM MOODS THE WAY YOU TALK, THE WAY YOU GET EXCITED ABOUT THINGS THE WAY YOU RANT THE WAY YOU GET ANGRY THE WAY YOU LAUGH THE WAY YOU SOMETIMES JUST SAY THE MOST RANDOM THING OUT OF NOWHERE 😭 I LOVE ALL THOSE LITTLE THINGS THAT MAKE YOUUU, YOUUU.😭💗💗💗
+
+AND I KNOWWW I CAN BE STUPID SOMETIMESSS 😭 I KNOW I DON'T ALWAYS DO THINGS PERFECTLY OR SAY THE RIGHT THING OR REALISE SMTFGGF WHEN I SHOULD SOMETIMES I'M JUST A COMPLETE IDIOTTTT 😭 BUT I SWEAR I CARE ABOUT YOU SOOOO MUCH. LIKE WAYYYY MORE THAN I KNOW HOW TO EXPLAIN SOMETIMES. AND EVEN WHEN I DON'T KNOW HOW TO SHOW IT PROPERLY, IT'S THERE. ALWAYSSSS 
+
+AND AGRHRHRH I JUST LOVE THAT I GET TO CALL YOU MINEEEE 😭💗 LIKE MY GIRLFRIENDDDD. MY JAAANUUU. MY BABYYYY. MY BEST FRIEND. MY FAVOURITE PERSON TO ANNOY  HEEEHEHEHE😭 MY FAVOURITE PERSON TO TALK TO. MY FAVOURITE PERSON TO LOVE 
+
+AND I WANT YOU TO KNOW THAT YOU NEVER HAVE TO BE SOME PERFECT VERSION OF YOURSELF AROUND MEE YOU DNT HAVE TO ALWAYS BE HAPPY. YOU DON'T HAVE TO ALWAYS KNOW WHAT TO SAY YOU DON'T HAVE TO HIDE WHEN SOMETHING IS BOTHERING YOU IF SOMETHING IS ON YOUR MIND, TELL MEEE. EVEN IF IT'S SOMETHING SMALL. EVEN IF YOU THINK I'LL FIND IT STUPID. I WANNA KNOW BECAUSE IT'S YOUUU AND IF I CAN'T FIX IT, I'LL STILL SIT THERE AND LISTEN TO YOUUU 😭💗
+
+AND JAANUUUU I SWEAR I AM SOOOO EXCITED FOR ALL THE LITTLE THINGS WE STILL HAVE TO DOOO. MORE DATESSSS. MORE RANDOM WALKS. MORE FOOD. MORE PHOTOS. MORE HUGS. MORE KISSES. MORE CALLS WHERE WE BOTH END UP SAYING "GUDNIGHT" LIKE 11 TIMES AND STILL DON'T HANG UP 😭😭😭 MORE MEMORIESSSS. SO MANY MORE MEMORIES SMSMSMS 
+
+AND HONESTLYYYYY I DON'T THINK I'LL EVER BE ABLE TO FULLY EXPLAIN HOW MUCH YOU MEAN TO ME. I CAN WRITE 500 PAGES AND STILL BE LIKE "AGRHRHRH I DIDN'T SAY IT PROPERLY" 😭😭😭 BECAUSE YOU MEAN SOOOSO MUCH TO ME. YOU'VE BECOME SUCH A HUGE PART OF MY LIFE ND MY DAYS ND MY LITTLE ROUTINES AND MY THOUGHTS AND EVERYTHINGGG
+
+SOOOO I JUST WANTED TO MAKE YOU THIS LITTLE THINGGG BECAUSE I WANTED YOU TO HAVE SOMETHING YOU COULD OPEN AND READ WHENEVER YOU WANT AND REMEMBER THAT THERE'S THIS ONE STUPID BOY WHO LOVES YOU SOOOO FUCKING MUCHHH 😭💗 EEHIEHEIEHIEHIII
+
+I LOVEEE YOUUUU JAAANUUUU
+SOOOO SOOOO SOOOO MUCHHHH
+MORE THAN I CAN PUT INTO WORDSSSAA 😭💗 
+
+AND IF YOU'RE SMILING WHILE READING THIS RIGHT NOWWW THENNNN HEHEHEHEHE I FUCKING WONNN 😭😭😭💗 
+
+I LOVEEEE YOUUUUUU VIDHIIIIIIII 💗💗💗</div>
+      <div class="end">my love ♡</div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+const intro=document.getElementById('intro');
+const game=document.getElementById('game');
+const letterScreen=document.getElementById('letterScreen');
+const targets=document.getElementById('targets');
+const counter=document.getElementById('counter');
+const unlock=document.getElementById('unlock');
+const hint=document.getElementById('hint');
+const envelope=document.getElementById('envelope');
+let caught=0;
+const TOTAL=8;
+const NEED=5;
+
+function begin(){
+  intro.classList.add('hide');
+  setTimeout(()=>game.classList.remove('hide'),180);
+  spawnHearts();
+}
+
+function spawnHearts(){
+  const positions=[
+    {x:-10,y:72},{x:-18,y:145},{x:-8,y:220},{x:-20,y:295},
+    {x:-12,y:350},{x:-25,y:105},{x:-15,y:260},{x:-30,y:185}
+  ];
+  positions.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.className='target';
+    b.textContent=['♡','♥','💗','♡','💗','♥','♡','💗'][i];
+    b.style.left=p.x+'px';
+    b.style.top=p.y+'px';
+    b.style.setProperty('--duration',(4.8+i*0.45)+'s');
+    b.style.animationDelay=(-i*0.7)+'s';
+    b.addEventListener('click',()=>{
+      if(b.classList.contains('hit'))return;
+      b.classList.add('hit');
+      caught++;
+      counter.textContent=caught+' / '+NEED;
+      if(caught>=NEED){
+        unlock.classList.add('ready');
+        hint.textContent='okayyy you caught enough 😭 now open it ♡';
+      }
+    });
+    targets.appendChild(b);
+  });
+}
+function openEnvelope(){
+  if(caught<NEED)return;
+  envelope.classList.add('open');
+  setTimeout(()=>{
+    game.classList.add('hide');
+    setTimeout(()=>{
+      letterScreen.classList.remove('hide');
+      letterScreen.scrollTop=0;
+    },450);
+  },950);
+}
+</script>
+</body>
+</html>
